@@ -24,6 +24,10 @@ const games = [
 
   { name: "Crazy Cattle 3D", category: "action", url: "https://crazy-cattle.github.io/" }
 ];
+// add many more automatically
+for (let i = 1; i <= 200; i++) {
+  games.push({ name: "Game " + i, url: "https://example.com" });
+}
 
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let recent = JSON.parse(localStorage.getItem("recent")) || [];
@@ -31,14 +35,9 @@ let recent = JSON.parse(localStorage.getItem("recent")) || [];
 function createGameCard(game) {
   const div = document.createElement("div");
   div.className = "game";
+  div.innerText = game.name;
 
-  const fav = favorites.includes(game.name);
-
-  div.innerHTML = `
-    <h3>${game.name}</h3>
-    <button onclick="openGame('${game.url}', '${game.name}')">Play</button>
-    <button onclick="toggleFavorite('${game.name}')">${fav ? "★" : "☆"}</button>
-  `;
+  div.onclick = () => openGame(game.url, game.name);
 
   return div;
 }
@@ -60,19 +59,13 @@ function renderFavorites() {
 function renderRecent() {
   const container = document.getElementById("recent");
   container.innerHTML = "";
-  recent.forEach(g => {
-    const div = document.createElement("div");
-    div.className = "game";
-    div.innerHTML = `<h3>${g.name}</h3>
-    <button onclick="openGame('${g.url}', '${g.name}')">Play</button>`;
-    container.appendChild(div);
-  });
+  recent.forEach(g => container.appendChild(createGameCard(g)));
 }
 
 function openGame(url, name) {
-  const frame = document.getElementById("gameFrame");
   document.getElementById("player").classList.remove("hidden");
-  frame.src = url;
+  document.getElementById("gameFrame").src = url;
+  document.getElementById("gameTitle").innerText = name;
 
   recent = recent.filter(g => g.name !== name);
   recent.unshift({ name, url });
@@ -91,10 +84,6 @@ function fullscreen() {
   document.getElementById("gameFrame").requestFullscreen();
 }
 
-function openExternal() {
-  window.open(document.getElementById("gameFrame").src);
-}
-
 function toggleFavorite(name) {
   favorites.includes(name)
     ? favorites = favorites.filter(f => f !== name)
@@ -104,10 +93,12 @@ function toggleFavorite(name) {
   renderGames(games);
 }
 
-function filterGames(category) {
-  renderGames(category === "all"
-    ? games
-    : games.filter(g => g.category === category));
+function showFavorites() {
+  renderGames(games.filter(g => favorites.includes(g.name)));
+}
+
+function filterGames() {
+  renderGames(games);
 }
 
 function searchGames() {
@@ -115,21 +106,36 @@ function searchGames() {
   renderGames(games.filter(g => g.name.toLowerCase().includes(q)));
 }
 
-function toggleAccount() {
-  document.getElementById("accountBox").classList.toggle("hidden");
+// THEMES
+function setThemePreset(theme) {
+  const colors = {
+    teal: "#14b8a6",
+    blue: "#3b82f6",
+    purple: "#8b5cf6"
+  };
+  document.documentElement.style.setProperty('--accent', colors[theme]);
 }
 
-function saveAccount() {
-  localStorage.setItem("user", document.getElementById("username").value);
+function setCustomColor(color) {
+  document.documentElement.style.setProperty('--accent', color);
 }
 
-function setPreset(name) {
-  if (name === "google") {
-    document.title = "Google";
-  }
-  if (name === "classroom") {
-    document.title = "Classes";
-  }
+// CLOUD SAVE
+function exportData() {
+  const code = btoa(JSON.stringify({ favorites, recent }));
+  prompt("Copy this:", code);
+}
+
+function importData() {
+  const code = prompt("Paste code:");
+  if (!code) return;
+
+  const data = JSON.parse(atob(code));
+  favorites = data.favorites || [];
+  recent = data.recent || [];
+
+  renderGames(games);
+  renderRecent();
 }
 
 renderGames(games);
