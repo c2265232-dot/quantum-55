@@ -44,17 +44,11 @@
   <div id="recent"></div>
 </div>
 
-<!-- PLAYER -->
-<div id="player" class="hidden">
-  <div class="player-header">
-    <button onclick="closeGame()">← Back</button>
-    <h2 id="gameTitle"></h2>
-    <button onclick="fullscreen()">⛶</button>
+<div id="fullscreenGame">
+  <div class="controls">
+    <button onclick="exitGame()">← Back</button>
+    <button onclick="exitFullscreen()">Exit Fullscreen</button>
   </div>
 
   <iframe id="gameFrame"></iframe>
 </div>
-
-<script src="script.js"></script>
-</body>
-</html>
