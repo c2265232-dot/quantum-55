@@ -1,11 +1,28 @@
 const games = [
-  { name: "2048", category: "puzzle", url: "https://play2048.co/" },
+  { name: "Slope", category: "action", url: "https://slopecom.com/" },
+  { name: "Run 3", category: "action", url: "https://run3.io/" },
   { name: "YoHoHo.io", category: "action", url: "https://yohoho.io/" },
-  { name: "Slope", category: "action", url: "https://slopegame.io/" },
+  { name: "Shell Shockers", category: "action", url: "https://shellshock.io/" },
+  { name: "Krunker", category: "action", url: "https://krunker.io/" },
+  { name: "Agar.io", category: "action", url: "https://agar.io/" },
+  { name: "Slither.io", category: "action", url: "https://slither.io/" },
+  { name: "Paper.io 2", category: "action", url: "https://paper-io.com/" },
+  { name: "Hole.io", category: "action", url: "https://hole-io.com/" },
+  { name: "Drift Hunters", category: "action", url: "https://drifthunters2.io/" },
+  { name: "Moto X3M", category: "action", url: "https://motox3m.io/" },
+  { name: "Tunnel Rush", category: "action", url: "https://tunnelrush.io/" },
 
-  { name: "Crazy Cattle 3D", category: "action", url: "https://crazy-cattle.github.io/" },
+  { name: "Tetris", category: "puzzle", url: "https://tetris.com/play-tetris" },
+  { name: "Minesweeper", category: "puzzle", url: "https://minesweeperonline.com/" },
+  { name: "Sudoku", category: "puzzle", url: "https://sudoku.com/" },
+  { name: "Wordle", category: "puzzle", url: "https://www.nytimes.com/games/wordle/index.html" },
+  { name: "Hextris", category: "puzzle", url: "https://hextris.io/" },
 
-  { name: "ADOFAI (Demo)", category: "rhythm", url: "https://fizzd.itch.io/a-dance-of-fire-and-ice" }
+  { name: "Basketball Stars", category: "sports", url: "https://basketballstars.io/" },
+  { name: "Soccer Random", category: "sports", url: "https://soccerrandom.io/" },
+  { name: "Volley Random", category: "sports", url: "https://volleyrandom.io/" },
+
+  { name: "Crazy Cattle 3D", category: "action", url: "https://crazy-cattle.github.io/" }
 ];
 
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
