@@ -24,115 +24,79 @@ const games = [
 
   { name: "Crazy Cattle 3D", category: "action", url: "https://crazy-cattle.github.io/" }
 ];
-// add many more automatically
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-let recent = JSON.parse(localStorage.getItem("recent")) || [];
-
+// 🎮 RENDER GAMES
 function createGameCard(game) {
   const div = document.createElement("div");
   div.className = "game";
-  div.innerText = game.name;
 
-  div.onclick = () => openGame(game.url, game.name);
+  div.innerHTML = `<span>${game.name}</span>`;
+
+  div.onclick = () => openGame(game.url);
 
   return div;
 }
 
-function renderGames(list) {
+function renderGames() {
   const container = document.getElementById("games");
   container.innerHTML = "";
-  list.forEach(g => container.appendChild(createGameCard(g)));
-  renderFavorites();
+
+  games.forEach(game => {
+    container.appendChild(createGameCard(game));
+  });
 }
 
-function renderFavorites() {
-  const container = document.getElementById("favorites");
-  container.innerHTML = "";
-  games.filter(g => favorites.includes(g.name))
-    .forEach(g => container.appendChild(createGameCard(g)));
+// 🎮 OPEN GAME (FULLSCREEN)
+function openGame(url) {
+  const container = document.getElementById("fullscreenGame");
+  const frame = document.getElementById("gameFrame");
+
+  container.style.display = "block";
+  frame.src = url;
+
+  // auto fullscreen
+  container.requestFullscreen().catch(() => {});
 }
 
-function renderRecent() {
-  const container = document.getElementById("recent");
-  container.innerHTML = "";
-  recent.forEach(g => container.appendChild(createGameCard(g)));
-}
-
-function openGame(url, name) {
-  document.getElementById("player").classList.remove("hidden");
-  document.getElementById("gameFrame").src = url;
-  document.getElementById("gameTitle").innerText = name;
-
-  recent = recent.filter(g => g.name !== name);
-  recent.unshift({ name, url });
-  if (recent.length > 10) recent.pop();
-
-  localStorage.setItem("recent", JSON.stringify(recent));
-  renderRecent();
-}
-
-function closeGame() {
-  document.getElementById("player").classList.add("hidden");
+// 🔙 EXIT GAME
+function exitGame() {
+  document.getElementById("fullscreenGame").style.display = "none";
   document.getElementById("gameFrame").src = "";
 }
 
-function fullscreen() {
-  document.getElementById("gameFrame").requestFullscreen();
+// ⛶ EXIT FULLSCREEN
+function exitFullscreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  }
 }
 
-function toggleFavorite(name) {
-  favorites.includes(name)
-    ? favorites = favorites.filter(f => f !== name)
-    : favorites.push(name);
-
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  renderGames(games);
-}
-
-function showFavorites() {
-  renderGames(games.filter(g => favorites.includes(g.name)));
-}
-
-function filterGames() {
-  renderGames(games);
-}
-
+// 🔍 SEARCH
 function searchGames() {
   const q = document.getElementById("search").value.toLowerCase();
-  renderGames(games.filter(g => g.name.toLowerCase().includes(q)));
+
+  const container = document.getElementById("games");
+  container.innerHTML = "";
+
+  games
+    .filter(g => g.name.toLowerCase().includes(q))
+    .forEach(g => container.appendChild(createGameCard(g)));
 }
 
-// THEMES
+// 🎨 THEME PRESETS
 function setThemePreset(theme) {
-  const colors = {
+  const themes = {
     teal: "#14b8a6",
     blue: "#3b82f6",
     purple: "#8b5cf6"
   };
-  document.documentElement.style.setProperty('--accent', colors[theme]);
+
+  document.documentElement.style.setProperty("--accent", themes[theme]);
 }
 
+// 🎨 CUSTOM COLOR
 function setCustomColor(color) {
-  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty("--accent", color);
 }
 
-// CLOUD SAVE
-function exportData() {
-  const code = btoa(JSON.stringify({ favorites, recent }));
-  prompt("Copy this:", code);
-}
-
-function importData() {
-  const code = prompt("Paste code:");
-  if (!code) return;
-
-  const data = JSON.parse(atob(code));
-  favorites = data.favorites || [];
-  recent = data.recent || [];
-
-  renderGames(games);
-  renderRecent();
-}
-
-renderGames(games);
-renderRecent();
+// 🚀 START
+renderGames();
