@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>quantum-55</title>
+  <title>Game Hub</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div class="sidebar">
-  <h2 class="logo">QUANTUM 55</h2>
+  <h2 class="logo">Game Hub</h2>
 
   <button onclick="filterGames('all')">All</button>
-  <button onclick="filterGames('action')">Action</button>
-  <button onclick="filterGames('puzzle')">Puzzle</button>
   <button onclick="showFavorites()">⭐ Favorites</button>
 
   <hr>
 
-  <button onclick="setPreset('google')">Google Tab</button>
-  <button onclick="setPreset('classroom')">Classroom Tab</button>
+  <!-- THEMES -->
+  <select onchange="setThemePreset(this.value)">
+    <option value="teal">Teal</option>
+    <option value="blue">Blue</option>
+    <option value="purple">Purple</option>
+  </select>
+
+  <input type="color" onchange="setCustomColor(this.value)">
+
+  <hr>
+
+  <button onclick="exportData()">Save</button>
+  <button onclick="importData()">Load</button>
 </div>
 
 <div class="main">
   <header>
     <input id="search" placeholder="Search..." oninput="searchGames()">
-    <button onclick="toggleAccount()">Account</button>
   </header>
 
   <h2>⭐ Favorites</h2>
@@ -38,18 +46,13 @@
 
 <!-- PLAYER -->
 <div id="player" class="hidden">
-  <div class="player-top">
-    <button onclick="closeGame()">←</button>
+  <div class="player-header">
+    <button onclick="closeGame()">← Back</button>
+    <h2 id="gameTitle"></h2>
     <button onclick="fullscreen()">⛶</button>
-    <button onclick="openExternal()">↗</button>
   </div>
-  <iframe id="gameFrame"></iframe>
-</div>
 
-<!-- ACCOUNT -->
-<div id="accountBox" class="hidden">
-  <input id="username" placeholder="Username">
-  <button onclick="saveAccount()">Save</button>
+  <iframe id="gameFrame"></iframe>
 </div>
 
 <script src="script.js"></script>
