@@ -25,10 +25,6 @@ const games = [
   { name: "Crazy Cattle 3D", category: "action", url: "https://crazy-cattle.github.io/" }
 ];
 // add many more automatically
-for (let i = 1; i <= 200; i++) {
-  games.push({ name: "Game " + i, url: "https://example.com" });
-}
-
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let recent = JSON.parse(localStorage.getItem("recent")) || [];
 
